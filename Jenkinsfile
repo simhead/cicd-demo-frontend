@@ -29,7 +29,7 @@ node {
 
       stage('Remove docker image for cleanup') {
         sh "echo Build number: simhead/cicd-demo-frontend:$BUILD_NUMBER"
-        sh "docker rmi simhead/cicd-demo-frontend:$BUILD_NUMBER"
+        //sh "docker rmi simhead/cicd-demo-frontend:$BUILD_NUMBER"
       }
 
 

@@ -32,7 +32,7 @@ USER node
 #RUN rm -rf ./package-lock.json
 #RUN rm -rf node_modules
 # After copying the project dependencies and switching our user, we can run npm install:
-RUN npm install --silent
+RUN npm install
 #RUN npm install react-scripts@3.4.1 --silent
 
 # Next, copy your application code with the appropriate permissions to the application
