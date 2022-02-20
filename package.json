@@ -22,7 +22,6 @@
     "react-text": "^3.2.4",
     "rechart": "0.0.1",
     "recharts": "^1.8.5",
-    "serve": "^13.0.2",
     "streamdataio-js-sdk": "^2.0.2",
     "streamdataio-js-sdk-auth": "^2.0.0",
     "styled-components": "^5.2.0",

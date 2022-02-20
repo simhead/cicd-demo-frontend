@@ -33,12 +33,15 @@ USER node
 #RUN rm -rf node_modules
 # After copying the project dependencies and switching our user, we can run npm install:
 RUN npm install --silent
-#RUN npm install react-scripts@3.4.1 -g --silent
+#RUN npm install react-scripts@3.4.1 --silent
 
 # Next, copy your application code with the appropriate permissions to the application
 # directory on the container:
 COPY --chown=node:node . .
 # This will ensure that the application files are owned by the non-root node user.
 
+#RUN npm run build
+#serveRUN ls -al /usr/bin/serve
 
+#CMD [ "serve", "-s", "build" ]
 CMD [ "npm", "start" ]
