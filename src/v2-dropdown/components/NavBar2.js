@@ -5,13 +5,12 @@ import { Link } from 'react-router-dom';
 import './NavBar.css';
 import UserDropdown from './UserDropdown';
 import DeviceDropdown from './DeviceDropdown';
-import logo from "../../soynet2.png";
+import logo from "../../devops.png";
 import Clock from "../../components/Clock";
 
 function NavBar() {
   const [click, setClick] = useState(false);
   const [userdropdown, setUserDropdown] = useState(false);
-  const [devicedropdown, setDeviceDropdown] = useState(false);
 
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
@@ -52,7 +51,7 @@ function NavBar() {
     <>
       <nav className='navbar'>
         <Link to='/' className='navbar-logo' onClick={closeMobileMenu}>
-            <img src={logo} width="100" height="35" alt="soynet.io" />
+            <img src={logo} width="175" height="100" alt="devops.io" />
             <Clock />
         </Link>
         <div className='menu-icon' onClick={handleClick}>

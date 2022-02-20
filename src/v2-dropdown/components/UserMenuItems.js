@@ -5,8 +5,13 @@ export const UserMenuItems = [
     cName: 'dropdown-link'
   },
   {
-    title: 'Add Activity',
-    path: '/addActivity',
+    title: 'View API Event - SSE',
+    path: '/streamdataio',
+    cName: 'dropdown-link'
+  },
+  {
+    title: 'Check Time',
+    path: '/tool/clock',
     cName: 'dropdown-link'
   }
 ];

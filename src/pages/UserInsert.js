@@ -40,10 +40,11 @@ class UserInsert extends Component {
         super(props)
 
         this.state = {
-            name: '',
-            rating: '',
-            time: '',
+            name: 'testuser-10',
+            rating: '10',
+            faceid: '12345'
         }
+
     }
 
     handleChangeInputName = async event => {
@@ -51,36 +52,34 @@ class UserInsert extends Component {
         this.setState({ name })
     }
 
-    handleChangeInputRating = async event => {
-        const rating = event.target.validity.valid
-            ? event.target.value
-            : this.state.rating
+    handleChangeInputFaceid = async event => {
+        const faceid = event.target.value
+        this.setState({ faceid })
+    }
 
+    handleChangeInputRating = async event => {
+        const rating = event.target.value
         this.setState({ rating })
     }
 
-    handleChangeInputTime = async event => {
-        const time = event.target.value
-        this.setState({ time })
-    }
-
-    handleIncludeMovie = async () => {
-        const { name, rating, time } = this.state
-        const arrayTime = time.split('/')
-        const payload = { name, rating, time: arrayTime }
+    handleIncludeAddUser = async () => {
+        const { name, faceid, rating } = this.state
+        //const arrayTime = time.split('/')
+        const payload = { name, faceid, rating }
 
         await api.insertUser(payload).then(res => {
             window.alert(`User created successfully`)
             this.setState({
                 name: '',
-                rating: '',
-                time: '',
+                faceid: '',
+                rating: ''
             })
         })
     }
 
     render() {
-        const { name, rating, time } = this.state
+        const { name, faceid, rating } = this.state
+
         return (
             <Wrapper>
                 <Title>Register User</Title>
@@ -89,30 +88,28 @@ class UserInsert extends Component {
                 <InputText
                     type="text"
                     value={name}
+                    size="50"
                     onChange={this.handleChangeInputName}
-                />
+                /><br/>
+
+                <Label>Faceid: </Label>
+                <InputText
+                    type="number"
+                    value={faceid}
+                    size="10"
+                    onChange={this.handleChangeInputFaceid}
+                /><br/>
 
                 <Label>Rating: </Label>
                 <InputText
                     type="number"
-                    step="0.1"
-                    lang="en-US"
-                    min="0"
-                    max="10"
-                    pattern="[0-9]+([,\.][0-9]+)?"
                     value={rating}
+                    size="5"
                     onChange={this.handleChangeInputRating}
-                />
+                /><br/>
 
-                <Label>Time: </Label>
-                <InputText
-                    type="text"
-                    value={time}
-                    onChange={this.handleChangeInputTime}
-                />
-
-                <Button onClick={this.handleIncludeMovie}>Add User</Button>
-                <CancelButton href={'/soynet/list'}>Cancel</CancelButton>
+                <Button onClick={this.handleIncludeAddUser}>Add User</Button>
+                <CancelButton href={'/users'}>List Users</CancelButton>
             </Wrapper>
         )
     }

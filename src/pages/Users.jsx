@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import api from '../api'
-import axios from 'axios'
 
 import "./Users.css";
 import styled from "styled-components";
@@ -46,15 +45,15 @@ class ViewUser extends Component {
 }
 
 class DeleteUser extends Component {
-    deleteUser = event => {
-        event.preventDefault()
+    deleteUser = async () => {
+        //event.preventDefault()
 
         if (
             window.confirm(
                 `Do you want to delete the User ${this.props.id} permanently?`,
             )
         ) {
-            api.deleteUserById(this.props.id)
+            await api.deleteUserById(this.props.id)
             window.location.reload()
         }
     }
@@ -75,8 +74,7 @@ class Users extends Component {
 
     getAllUsers = async () => {
         try {
-            const res = await axios.get('http://ec2-15-165-48-131.ap-northeast-2.compute.amazonaws.com:9000/soynet/api/users');
-
+            const res = await api.getAllUsers();
             console.log('TEST', res);
 
             this.setState({loading:false, users: res.data.data})
@@ -85,17 +83,6 @@ class Users extends Component {
         }
     };
 
-    /*
-    async getAllUsers() {
-
-        const res = await axios.get('http://localhost:9000/soynet/api/users')
-        console.log(res.data)
-
-        this.setState({loading:false, users: res.data.data})
-    }
-
-
-*/
     componentDidMount = async () => {
         await this.getAllUsers()
     }
@@ -104,11 +91,6 @@ class Users extends Component {
 
     render() {
         const columns = [
-            /*{
-                Header: 'ID',
-                accessor: '_id',
-                filterable: true,
-            },*/
             {
                 Header: 'Name',
                 accessor: 'name',
@@ -155,7 +137,7 @@ class Users extends Component {
                 <ReactTable
                     data={this.state.users}
                     columns={columns}
-                    defaultPageSize={10}
+                    defaultPageSize={5}
                     showPageSizeOptions={true}
                     minRows={0}
                 />

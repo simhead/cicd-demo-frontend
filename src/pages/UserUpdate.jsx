@@ -42,11 +42,8 @@ class UserUpdate extends Component {
         this.state = {
             id: this.props.match.params.id,
             name: '',
-            rating: '',
-            time: '',
             faceid: '',
-            mobile: '',
-            address: ''
+            rating: ''
         }
     }
 
@@ -56,37 +53,27 @@ class UserUpdate extends Component {
     }
 
     handleChangeInputFaceid = async event => {
-        const faceid = event.target.validity.valid
-            ? event.target.value
-            : this.state.faceid
-
+        const faceid = event.target.value
         this.setState({ faceid })
     }
 
-    handleChangeInputMobile = async event => {
-        const mobile = event.target.value
-        this.setState({ mobile })
-    }
-
-    handleChangeInputAddress = async event => {
-        const address = event.target.value
-        this.setState({ address })
+    handleChangeInputRating = async event => {
+        const rating = event.target.value
+        this.setState({ rating })
     }
 
     handleUpdateUser = async () => {
-        const { id, name, rating, time, faceid, mobile, address } = this.state
-        const arrayTime = time.split('/')
-        const payload = { name, rating, time: arrayTime, faceid, mobile, address }
+        const { id, name, faceid, rating } = this.state
+        const payload = { name, faceid, rating }
 
+        console.log('id: '+id+'')
+        console.log(payload)
         await api.updateUserById(id, payload).then(res => {
             window.alert(`User updated successfully`)
             this.setState({
-                name: '',
-                rating: '',
-                time: '',
-                faceid: '',
-                mobile: '',
-                address: ''
+                name: name,
+                faceid: faceid,
+                rating: rating,
             })
         })
     }
@@ -97,16 +84,14 @@ class UserUpdate extends Component {
 
         this.setState({
             name: user.data.data.name,
-            rating: user.data.data.rating,
-            time: user.data.data.time.join('/'),
             faceid: user.data.data.faceid,
-            mobile: user.data.data.mobile,
-            address: user.data.data.address,
+            rating: user.data.data.rating,
+
         })
     }
 
     render() {
-        const { name, rating, time, faceid, mobile, address } = this.state
+        const { name, faceid, rating } = this.state
         return (
             <Wrapper>
                 <Title>Update User</Title>
@@ -120,34 +105,20 @@ class UserUpdate extends Component {
 
                 <Label>Faceid: </Label>
                 <InputText
-                    type="number"
-                    step="1"
-                    lang="en-US"
-                    min="100000"
-                    max="999999"
-                    pattern="[100000-999999]+([,\.][0-9]+)?"
+                    type="text"
                     value={faceid}
-                    size="10"
                     onChange={this.handleChangeInputFaceid}
                 /><br/>
 
-                <Label>Mobile Number: </Label>
+                <Label>Rating: </Label>
                 <InputText
                     type="text"
-                    value={mobile}
-                    size="15"
-                    onChange={this.handleChangeInputMobile}
+                    value={rating}
+                    onChange={this.handleChangeInputRating}
                 /><br/>
 
-                <Label>Address: </Label>
-                <InputText
-                    type="text"
-                    value={address}
-                    size="50"
-                    onChange={this.handleChangeInputAddress}
-                /><br/>
                 <Button onClick={this.handleUpdateUser}>Update User</Button>
-                <CancelButton href={'/users'}>Cancel</CancelButton>
+                <CancelButton href={'/users'}>List Users</CancelButton>
             </Wrapper>
         )
     }

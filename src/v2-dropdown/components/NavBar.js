@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { LoginButton } from './LoginButton';
-import { SignupButton } from './SignupButton';
 import { Link } from 'react-router-dom';
 import './NavBar.css';
 import UserDropdown from './UserDropdown';
-import DeviceDropdown from './DeviceDropdown';
-import logo from "../../soynet2.png";
-import Clock from "../../components/Clock";
+import logo from "../../devops.png";
 
 function NavBar() {
   const [click, setClick] = useState(false);
   const [userdropdown, setUserDropdown] = useState(false);
-  const [devicedropdown, setDeviceDropdown] = useState(false);
   const [scrolled,setScrolled]=React.useState(false);
 
   const handleScroll=() => {
@@ -52,27 +47,11 @@ function NavBar() {
     }
   };
 
-  const onDeviceMouseEnter = () => {
-    if (window.innerWidth < 960) {
-      setDeviceDropdown(false);
-    } else {
-      setDeviceDropdown(true);
-    }
-  };
-
-  const onDeviceMouseLeave = () => {
-    if (window.innerWidth < 960) {
-      setDeviceDropdown(false);
-    } else {
-      setDeviceDropdown(false);
-    }
-  };
-
   return (
     <>
       <nav className='navbar'>
         <Link to='/' className='navbar-logo' onClick={closeMobileMenu}>
-            <img src={logo} width="150" height="50" alt="soynet.io" />
+            <img src={logo} width="150" height="50" alt="test.io" />
 
         </Link>
         <div className='menu-icon' onClick={handleClick}>
@@ -98,20 +77,7 @@ function NavBar() {
             </Link>
             {userdropdown && <UserDropdown />}
           </li>
-          <li
-              className='nav-item'
-              onMouseEnter={onDeviceMouseEnter}
-              onMouseLeave={onDeviceMouseLeave}
-          >
-            <Link
-                to='/devices'
-                className='nav-links'
-                onClick={closeMobileMenu}
-            >
-              Devices <i className='fas fa-caret-down' />
-            </Link>
-            {devicedropdown && <DeviceDropdown />}
-          </li>
+
           <li className='nav-item'>
             <Link
               to='/contact-us'
