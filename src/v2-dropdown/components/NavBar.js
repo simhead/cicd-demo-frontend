@@ -31,6 +31,7 @@ function NavBar() {
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
 
+
   const onMouseEnter = () => {
     if (window.innerWidth < 960) {
       setUserDropdown(false);
@@ -73,9 +74,28 @@ function NavBar() {
               className='nav-links'
               onClick={closeMobileMenu}
             >
-              Users <i className='fas fa-caret-down' />
+              Users
             </Link>
-            {userdropdown && <UserDropdown />}
+          </li>
+
+          <li className='nav-item'>
+            <Link
+                to='/adduser'
+                className='nav-links'
+                onClick={closeMobileMenu}
+            >
+              Add User
+            </Link>
+          </li>
+
+          <li className='nav-item'>
+            <Link
+                to='/streamdataio'
+                className='nav-item'
+                onClick={closeMobileMenu}
+            >
+              StreamDataIO
+            </Link>
           </li>
 
           <li className='nav-item'>

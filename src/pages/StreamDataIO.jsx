@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 
 import 'react-table-6/react-table.css'
 import styled from 'styled-components'
+import ReactTable from "react-table-6";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Title = styled.h4.attrs({
     className: 'h1',
@@ -12,7 +14,6 @@ const Wrapper = styled.div.attrs({
 })`
     margin: 0 10px;
 `
-
 // add EventSource dependency
 var streamdataio = require('streamdataio-js-sdk/dist/bundles/streamdataio-node');
 var AuthStrategy = require('streamdataio-js-sdk-auth');
@@ -29,21 +30,25 @@ var targetUrl = 'http://stockmarket.streamdata.io/v2/prices';
 var appToken = 'ODU1ODc3NzgtM2EwMS00ZmJlLThhNTMtODFiOTY3ZGViZjBh';
 var privateKey = 'YTQ4MDIzMDYtZjI0My00YTliLTkzMTgtMjVkOTFhMzlmNzcwYTc0MWNiZjMtNWVkZS00MjQ2LTgzOTUtMjU3OTAyMzY3NjAz';
 
-let eventSource =
-    streamdataio.createEventSource(targetUrl, appToken, [], AuthStrategy.newSignatureStrategy(appToken, privateKey));
 let stockresults = [];
 let strresults = '';
-
+let eventSource =
+    streamdataio.createEventSource(targetUrl, appToken, [], AuthStrategy.newSignatureStrategy(appToken, privateKey));
 
 
 class StreamDataIO extends Component {
     constructor(props) {
         super(props);
-        this.state={
+        this.state = {
             results: [],
             loading: true
         }
 
+        //this.handleOnPatch = this.handleOnPatch().bind(this);
+    }
+
+    setResults () {
+        this.setState({results : strresults});
     }
 
     getResults () {
@@ -62,7 +67,7 @@ class StreamDataIO extends Component {
                 stockresults = data;
                 console.log(stockresults);
                 strresults = JSON.stringify(stockresults);
-                //this.setState({results: stockresults})
+
                 //print.printTable(stockresults);
 
             })
@@ -75,13 +80,13 @@ class StreamDataIO extends Component {
                 console.log("patch: ", patch);
                 // apply the patch to data using json patch API
                 jsonPatch.applyPatch(stockresults, patch);
+                console.log("UPDATE: ", stockresults);
                 strresults = JSON.stringify(stockresults);
+                //console.log("UPDATE in String: ", strresults);
+
                 // do whatever you wish with the update data
-                //this.setState({results: stockresults.toJSON()})
+                //this.setState({results: stockresults});
                 //print.printTable(stockresults);
-                //print.printTable(stockresults);
-
-
             })
 
             // the standard 'error' callback will be called when an error occur with the evenSource
@@ -93,33 +98,76 @@ class StreamDataIO extends Component {
 
             });
 
-        this.forceUpdate();
         eventSource.open();
     }
 
     // Enable manual refresh click button
     handleClick = () => {
         this.setState({ mssg: "Refresh Manually" });
+        //this.setState({results : strresults});
     };
 
     componentDidMount () {
-        this.getResults()
+        this.getResults();
+        this.interval = setInterval(this.handleClick, 3000);
 
+    }
+
+    stopInterval() {
+        clearInterval(this.interval);
     }
 
     componentWillUnmount() {
-        //clearInterval(this.timerID);
+        this.stopInterval();
     }
 
     render() {
+        const columns = [
+            {
+                Header: 'Ticker',
+                accessor: 'ticker',
+                filterable: true,
+            },
+            {
+                Header: 'Title',
+                accessor: 'title',
+                filterable: true,
+            },
+            {
+                Header: 'Company',
+                accessor: 'company',
+            },
+            {
+                Header: 'Source',
+                accessor: 'source',
+            },
+            {
+                Header: 'Price',
+                accessor: 'last',
+            },
+            {
+                Header: 'Volume',
+                accessor: 'volume',
+            },
+            {
+                Header: 'Time',
+                accessor: 'dt',
+            },
+        ]
 
         return (
             <Wrapper>
                 <Title>Stock Stream Data from StreamData.io using SSE</Title>
             <div>
+                <br/>  Stock prices in Real-time Table
+                <ReactTable
+                    data={stockresults}
+                    columns={columns}
+                    showPageSizeOptions={false}
+                    showPaginationBottom={stockresults.length > 20 ? true: false}
+                    minRows={0}
+                /> <br/>
                 <button onClick={this.handleClick}>Manual Refresh</button><br/>
-                <p>{strresults}</p>
-
             </div>
             </Wrapper>
         );
