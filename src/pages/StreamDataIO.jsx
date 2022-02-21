@@ -35,6 +35,26 @@ let strresults = '';
 let eventSource =
     streamdataio.createEventSource(targetUrl, appToken, [], AuthStrategy.newSignatureStrategy(appToken, privateKey));
 
+function date2str(x, y) {
+    const z = {
+        M: x.getMonth() + 1,
+        d: x.getDate(),
+        h: x.getHours(),
+        m: x.getMinutes(),
+        s: x.getSeconds()
+    };
+    y = y.replace(/(M+|d+|h+|m+|s+)/g, function(v) {
+        return ((v.length > 1 ? "0" : "") + z[v.slice(-1)]).slice(-2)
+    });
+
+    return y.replace(/(y+)/g, function(v) {
+        return x.getFullYear().toString().slice(-v.length)
+    });
+}
+
+function currencyFormat(num) {
+    return '$' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+}
 
 class StreamDataIO extends Component {
     constructor(props) {
@@ -144,6 +164,11 @@ class StreamDataIO extends Component {
             {
                 Header: 'Price',
                 accessor: 'last',
+                Cell : (last) => {
+                    const num = parseFloat(last.value)
+                    const currency = currencyFormat(num);
+                    return currency
+                }
             },
             {
                 Header: 'Volume',
@@ -152,6 +177,13 @@ class StreamDataIO extends Component {
             {
                 Header: 'Time',
                 accessor: 'dt',
+                Cell : (dt) => {
+                    //props.value will convert the date
+                    const dateObject = new Date(dt.value);
+                    //const datetimeseries = dateObject.getTime()
+                    const datetimeseries = date2str(dateObject, 'MM-dd hh:mm:ss')
+                    return datetimeseries
+                }
             },
         ]
 
